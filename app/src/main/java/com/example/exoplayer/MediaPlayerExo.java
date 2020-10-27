@@ -12,6 +12,7 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SeekParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.analytics.AnalyticsListener;
+import com.google.android.exoplayer2.database.ExoDatabaseProvider;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.LoopingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
@@ -34,7 +35,8 @@ import com.google.android.exoplayer2.util.Util;
 import java.io.File;
 
 public class MediaPlayerExo implements IMediaPlayer {
-    private static final String TAG = "MediaPlayerExo";
+    private static int count = 0;
+    private String TAG = "MediaPlayer, Activity id:" + (count++);
     public static final int MIN_BUFFER_MS = 5000; //最低数据加载时机,默认值为15秒
     public static final int MAX_BUFFER_MS = 10000; //最高数据加载时机，默认值为30秒
     public static final int BUFFER_FOR_PLAYBACK_MS = 1500; //最低数据播放时机， 默认值为2.5秒
@@ -123,6 +125,7 @@ public class MediaPlayerExo implements IMediaPlayer {
         this.exoPlayer.setSeekParameters(SeekParameters.EXACT);
         this.exoPlayer.addAnalyticsListener(analyticsListener);
         isPrepared = false;
+        Log.e(TAG, "init");
     }
 
     @Override
@@ -131,6 +134,7 @@ public class MediaPlayerExo implements IMediaPlayer {
             isPrepared = false;
             this.exoPlayer.prepare(buildMediaSource(Uri.parse(url), null));
             this.exoPlayer.seekTo(0);
+            Log.e(TAG, "prepare:" + url);
         }
     }
 
@@ -138,6 +142,7 @@ public class MediaPlayerExo implements IMediaPlayer {
     public void start() {
         if (this.exoPlayer != null) {
             this.exoPlayer.setPlayWhenReady(true);
+            Log.e(TAG, "setPlayWhenReady true");
         }
     }
 
@@ -145,6 +150,7 @@ public class MediaPlayerExo implements IMediaPlayer {
     public void stop() {
         if (this.exoPlayer != null) {
             this.exoPlayer.setPlayWhenReady(false);
+            Log.e(TAG, "setPlayWhenReady false");
         }
     }
 
@@ -282,6 +288,7 @@ public class MediaPlayerExo implements IMediaPlayer {
             videoSource = new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
         }
         //循环播放
+        Log.e(TAG, "buildMediaSource");
         return new LoopingMediaSource(videoSource);
     }
 
@@ -312,7 +319,7 @@ public class MediaPlayerExo implements IMediaPlayer {
                 synchronized (lock) {
                     if (sSimpleCache == null) {
                         LeastRecentlyUsedCacheEvictor evictor = new LeastRecentlyUsedCacheEvictor(maxCacheSize);
-                        sSimpleCache = new SimpleCache(cacheDir, evictor);
+                        sSimpleCache = new SimpleCache(cacheDir, evictor, new ExoDatabaseProvider(context.getApplicationContext()));
                     }
                 }
             }
