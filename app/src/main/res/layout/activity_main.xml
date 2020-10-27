@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.example.exoplayer.BaseVideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:layout_alignParentBottom="true">
+
+        <ProgressBar
+            android:id="@+id/processBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_toRightOf="@+id/time"
+            android:max="100"
+            android:maxHeight="2dp"
+            android:minHeight="2dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:progressDrawable="@drawable/seekbar" />
+
+        <TextView
+            android:id="@+id/time"
+            android:layout_width="40dp"
+            android:layout_height="24dp"
+            android:gravity="center"
+            android:text="00:00"
+            android:textColor="#ff000000"
+            android:textSize="15dp" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/newActivity"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:text="New Video Player" />
+</RelativeLayout>
